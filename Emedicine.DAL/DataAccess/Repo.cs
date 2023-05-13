@@ -1,48 +1,62 @@
-﻿using Emedicine.DAL.DataAccess.Interface;
-using System;
-using System.Collections.Generic;
+﻿using Emedicine.DAL.Data;
+using Emedicine.DAL.DataAccess.Interface;
+using Microsoft.EntityFrameworkCore;
+
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Emedicine.DAL.DataAccess
 {
-    internal class Repo<T> : IRepo<T> where T : class
+    public class Repo<T> : IRepo<T> where T : class
     {
-        public void AddAsync(Task entity)
+        public readonly MedicineDbContext md;
+        public DbSet<T> DbSet { get; set; }
+        public Repo(MedicineDbContext _md) 
         {
-            throw new NotImplementedException();
+            md = _md;
+            DbSet=_md.Set<T>();
         }
 
-        public Task<IEnumerable<T>> GetAllAsync()
+        public void AddAsync(T entity)
         {
-            throw new NotImplementedException();
+            DbSet.AddAsync(entity);
         }
 
-        public Task<IEnumerable<T>> GetAllListAsync(Expression<Func<T, bool>> filter)
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = DbSet;
+            return await query.ToListAsync();
         }
 
-        public Task<T> GetFirstOrDefault(Expression<Func<T, bool>> filter)
+        public async Task<IEnumerable<T>> GetAllListAsync(Expression<Func<T, bool>> filter)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = DbSet;
+            return await query.Where(filter).ToListAsync();
+        }
+
+        public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter)
+        {
+            IQueryable<T> query = DbSet;
+            query = query.Where(filter);
+            return await query.FirstOrDefaultAsync();
         }
 
         public void Remove(T entity)
         {
-            throw new NotImplementedException();
+            DbSet.Remove(entity);
+             
         }
 
         public void RemoveRange(IEnumerable<T> entities)
         {
-            throw new NotImplementedException();
+            DbSet.RemoveRange(entities);
         }
 
         public void UpdateExisting(T entity)
         {
-            throw new NotImplementedException();
+            DbSet.Update(entity);
         }
+        
     }
 }
