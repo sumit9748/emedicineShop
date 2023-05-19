@@ -14,16 +14,17 @@ namespace Emedicine.DAL.model
         [Required]
         public int Id { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         [ForeignKey("UserId")]
         public User user { get; set; }
         [Required]
-        public int MedicalShopId { get; set; }
+        public int? MedicalShopId { get; set; }
         [ForeignKey("MedicalShopId")]
         public virtual Medicalshop medicalshop { get; set; }
         [Required]
         public decimal OrderTotal { get; set; }
         [Required]
         public string OrderStatus { get; set; }
+        
     }
 }

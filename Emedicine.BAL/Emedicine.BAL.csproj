@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Emedicine.DAL\Emedicine.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UserBased\" />
-  </ItemGroup>
-
 </Project>

@@ -20,7 +20,6 @@ namespace Emedicine.DAL.DataAccess
             medicine = new MedicineRepo(md);
             medicalShop = new MedicalShopRepo(md);
             order=new OrderRepo(md);
-            medicalShop=new MedicalShopRepo(md);
             orderItem = new OrderItemRepo(md);
             cart=new CartRepo(md);
         }
@@ -51,18 +50,38 @@ namespace Emedicine.DAL.DataAccess
     public class MedicineRepo : Repo<Medicine>, IMedicine
     {
         public readonly MedicineDbContext md;
+        public DbSet<Medicine> MedicineDbSet { get; set; }
+        public DbSet<MedicalShopItem> MedicalShopItemDbSet { get; set; }
+
+
         public MedicineRepo(MedicineDbContext _md) : base(_md)
         {
             md = _md;
+            MedicineDbSet = md.Set<Medicine>();
+            MedicalShopItemDbSet=md.Set<MedicalShopItem>();
         }
+        public async Task<IEnumerable<Medicine>> GetMedicalShopItems(int id)
+        {
+            var ans = from ms in MedicalShopItemDbSet
+                      where ms.MedicalShopId == id
+                      select ms.medicine;
+
+            return await ans.ToListAsync();
+        }
+
+
     }
     public class MedicalShopRepo : Repo<Medicalshop>, IMedicalShop
     {
-        public readonly MedicineDbContext md;
+        private readonly MedicineDbContext md;
+        public DbSet<Medicalshop> MedicalShopDbSet { get; set; }
+
         public MedicalShopRepo(MedicineDbContext _md) : base(_md)
         {
             md = _md;
+            MedicalShopDbSet = md.Set<Medicalshop>();
         }
+
     }
     public class OrderRepo : Repo<Order>, IOrder
     {
@@ -91,9 +110,18 @@ namespace Emedicine.DAL.DataAccess
     public class CartRepo : Repo<Cart>, ICart
     {
         public readonly MedicineDbContext md;
+        public DbSet<Cart> CartDbSet { get; set; }
         public CartRepo(MedicineDbContext _md) : base(_md)
         {
             md = _md;
+            CartDbSet=md.Set<Cart>();
+        }
+        public async Task<IEnumerable<Cart>> GetAllCartByUserId(int userId)
+        {
+            var ans=from cart in CartDbSet
+                    where cart.UserId == userId
+                    select cart;
+            return await ans.ToListAsync();
         }
     }
 }

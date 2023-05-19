@@ -1,17 +1,11 @@
 ﻿using Emedicine.DAL.model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Emedicine.BAL
+
+namespace Emedicine.BAL.UserBased
 {
-    public interface IMedicineManager
+    public interface IUserManager
     {
         public Task<IEnumerable<User>> GetAllUser();
-        public Task<IEnumerable<Medicalshop>> GetAllGetAllMedicalShop();
-        public Task<IEnumerable<Medicine>> GetAllMedicine();
         public Task<IEnumerable<User>> GetOnlineUser();
         public Task<User> GetUser(int id);
         public Task<bool> AddUser(User user);

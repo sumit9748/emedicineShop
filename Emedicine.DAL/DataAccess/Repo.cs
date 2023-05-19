@@ -10,7 +10,7 @@ namespace Emedicine.DAL.DataAccess
 {
     public class Repo<T> : IRepo<T> where T : class
     {
-        public readonly MedicineDbContext md;
+        private readonly MedicineDbContext md;
         public DbSet<T> DbSet { get; set; }
         public Repo(MedicineDbContext _md) 
         {

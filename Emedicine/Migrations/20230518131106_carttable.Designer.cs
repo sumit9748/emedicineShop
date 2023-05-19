@@ -4,6 +4,7 @@ using Emedicine.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Emedicine.Migrations
 {
     [DbContext(typeof(MedicineDbContext))]
-    partial class MedicineDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230518131106_carttable")]
+    partial class carttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +36,6 @@ namespace Emedicine.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("MedicalShopId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MedicineId")
                         .HasColumnType("int");
 
@@ -49,8 +49,6 @@ namespace Emedicine.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MedicalShopId");
 
                     b.HasIndex("MedicineId");
 
@@ -260,12 +258,6 @@ namespace Emedicine.Migrations
 
             modelBuilder.Entity("Emedicine.DAL.model.Cart", b =>
                 {
-                    b.HasOne("Emedicine.DAL.model.Medicalshop", "medicicalshop")
-                        .WithMany()
-                        .HasForeignKey("MedicalShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Emedicine.DAL.model.Medicine", "medicine")
                         .WithMany()
                         .HasForeignKey("MedicineId")
@@ -277,8 +269,6 @@ namespace Emedicine.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("medicicalshop");
 
                     b.Navigation("medicine");
 

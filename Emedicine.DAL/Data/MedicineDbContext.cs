@@ -15,6 +15,7 @@ namespace Emedicine.DAL.Data
         public DbSet<MedicalShopItem> MedicalShopItems { get; set; }
         public DbSet<OrderItem> OrdersItems { get; set;}
 
-
+        
     }
+    
 }

@@ -13,12 +13,13 @@ namespace Emedicine.DAL.model
         [Key]
         public int Id { get; set; }
         [Required]
-        public int OrderId { get; set; }
+        public int? OrderId { get; set; }
         [ForeignKey("OrderId")]
         public virtual Order order { get; set; }
         [Required]
-        public int MedicineId { get; set; }
+        public int? MedicineId { get; set; }
         [ForeignKey("MedicineId")]
         public virtual Medicine medicine { get; set; }
+
     }
 }

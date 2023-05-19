@@ -19,12 +19,19 @@ namespace Emedicine.DAL.DataAccess.Interface
     public interface IUser : IRepo<User>
     {
     }
-    public interface IMedicine:IRepo<Medicine> { }
+    public interface IMedicine:IRepo<Medicine>
+    {
+        public Task<IEnumerable<Medicine>> GetMedicalShopItems(int id);
+    }
     public interface IMedicalShop:IRepo<Medicalshop> { }
     public interface IOrder:IRepo<Order> { }
     public interface IOrderItem : IRepo<OrderItem> { }
     public interface IMedicalShopItem : IRepo<MedicalShopItem> { }
-    public interface ICart : IRepo<Cart> { }
+    public interface ICart : IRepo<Cart> 
+    {
+
+        public Task<IEnumerable<Cart>> GetAllCartByUserId(int userId);
+    }
 
 
 

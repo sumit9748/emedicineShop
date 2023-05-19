@@ -1,12 +1,12 @@
 ﻿using Emedicine.DAL.DataAccess.Interface;
 using Emedicine.DAL.model;
 
-namespace Emedicine.BAL
+namespace Emedicine.BAL.UserBased
 {
-    public class MedicineManager : IMedicineManager
+    public class UserManager : IUserManager
     {
         private readonly IDataAccess _da;
-        public MedicineManager(IDataAccess da)
+        public UserManager(IDataAccess da)
         {
             _da = da;
         }
@@ -15,22 +15,13 @@ namespace Emedicine.BAL
             return await _da.user.GetAllAsync();
         }
 
-        public async Task<IEnumerable<Medicine>> GetAllMedicine()
-        {
-            return await _da.medicine.GetAllAsync();
-        }
-
-        public async Task<IEnumerable<Medicalshop>> GetAllGetAllMedicalShop()
-        {
-            return await _da.medicalShop.GetAllAsync();
-        }
         public async Task<IEnumerable<User>> GetOnlineUser()
         {
-            return await _da.user.GetAllListAsync(x=>x.Status == "online");
+            return await _da.user.GetAllListAsync(x => x.Status == "online");
         }
         public async Task<User> GetUser(int id)
         {
-            return await _da.user.GetFirstOrDefaultAsync(x=>x.Id == id);
+            return await _da.user.GetFirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<bool> AddUser(User user)
         {
@@ -42,7 +33,7 @@ namespace Emedicine.BAL
             else
             {
                 IEnumerable<User> users = await _da.user.GetAllAsync();
-                if(users.Any(users=>users.Id == user.Id|| users.Email == user.Email))
+                if (users.Any(users => users.Id == user.Id || users.Email == user.Email))
                 {
                     return await Task.FromResult(false);
                 }
@@ -53,8 +44,8 @@ namespace Emedicine.BAL
         }
         public void UpdateUser(User user)
         {
-              _da.user.UpdateExisting(user);
-              _da.save();     
+            _da.user.UpdateExisting(user);
+            _da.save();
         }
         public void DeleteUser(User user)
         {

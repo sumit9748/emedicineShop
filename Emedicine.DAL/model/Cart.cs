@@ -21,5 +21,7 @@ namespace Emedicine.DAL.model
         public int MedicineId { get; set; }
         [ForeignKey("MedicineId")]
         public virtual Medicine medicine { get; set; }
+        public int MedicalShopId { get; set; }
+        public virtual Medicalshop medicicalshop { get; set; }
     }
 }

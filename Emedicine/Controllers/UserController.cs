@@ -1,7 +1,7 @@
-﻿using Emedicine.BAL;
+﻿using Emedicine.BAL.UserBased;
 using Emedicine.DAL.model;
 
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 namespace Emedicine.Controllers
 {
@@ -9,8 +9,8 @@ namespace Emedicine.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IMedicineManager md;
-        public UserController(IMedicineManager _md) 
+        private readonly IUserManager md;
+        public UserController(IUserManager _md) 
         {
             md= _md;
         }
@@ -72,7 +72,7 @@ namespace Emedicine.Controllers
             catch(Exception es)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                                  es.Message);
+                                  "Something went wrong");
             }
             
         }
