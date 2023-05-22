@@ -20,7 +20,8 @@ namespace Emedicine.DAL.DataAccess
 
         public void AddAsync(T entity)
         {
-            DbSet.AddAsync(entity);
+          DbSet.AddAsync(entity);
+    
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
@@ -57,6 +58,5 @@ namespace Emedicine.DAL.DataAccess
         {
             DbSet.Update(entity);
         }
-        
     }
 }

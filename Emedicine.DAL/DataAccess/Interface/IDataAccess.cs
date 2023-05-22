@@ -29,8 +29,6 @@ namespace Emedicine.DAL.DataAccess.Interface
     public interface IMedicalShopItem : IRepo<MedicalShopItem> { }
     public interface ICart : IRepo<Cart> 
     {
-
-        public Task<IEnumerable<Cart>> GetAllCartByUserId(int userId);
     }
 
 

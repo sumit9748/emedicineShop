@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Emedicine.Migrations
 {
     [DbContext(typeof(MedicineDbContext))]
-    [Migration("20230518131106_carttable")]
-    partial class carttable
+    [Migration("20230521104951_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace Emedicine.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("MedicalShopId")
+                        .HasColumnType("int");
+
                     b.Property<int>("MedicineId")
                         .HasColumnType("int");
 
@@ -49,6 +52,8 @@ namespace Emedicine.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MedicalShopId");
 
                     b.HasIndex("MedicineId");
 
@@ -102,7 +107,6 @@ namespace Emedicine.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Rating")
-                        .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("ID");
@@ -125,6 +129,7 @@ namespace Emedicine.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ImgUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Manufacturer")
@@ -258,7 +263,13 @@ namespace Emedicine.Migrations
 
             modelBuilder.Entity("Emedicine.DAL.model.Cart", b =>
                 {
-                    b.HasOne("Emedicine.DAL.model.Medicine", "medicine")
+                    b.HasOne("Emedicine.DAL.model.Medicalshop", "Medicicalshop")
+                        .WithMany()
+                        .HasForeignKey("MedicalShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Emedicine.DAL.model.Medicine", "Medicine")
                         .WithMany()
                         .HasForeignKey("MedicineId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -270,28 +281,30 @@ namespace Emedicine.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("medicine");
+                    b.Navigation("Medicicalshop");
+
+                    b.Navigation("Medicine");
 
                     b.Navigation("user");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.MedicalShopItem", b =>
                 {
-                    b.HasOne("Emedicine.DAL.model.Medicalshop", "medicalshop")
-                        .WithMany()
+                    b.HasOne("Emedicine.DAL.model.Medicalshop", "MedicalShop")
+                        .WithMany("MedicalShopItems")
                         .HasForeignKey("MedicalShopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Emedicine.DAL.model.Medicine", "medicine")
-                        .WithMany()
+                    b.HasOne("Emedicine.DAL.model.Medicine", "Medicine")
+                        .WithMany("MedicalShopItems")
                         .HasForeignKey("MedicineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("medicalshop");
+                    b.Navigation("MedicalShop");
 
-                    b.Navigation("medicine");
+                    b.Navigation("Medicine");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.Order", b =>
@@ -330,6 +343,16 @@ namespace Emedicine.Migrations
                     b.Navigation("medicine");
 
                     b.Navigation("order");
+                });
+
+            modelBuilder.Entity("Emedicine.DAL.model.Medicalshop", b =>
+                {
+                    b.Navigation("MedicalShopItems");
+                });
+
+            modelBuilder.Entity("Emedicine.DAL.model.Medicine", b =>
+                {
+                    b.Navigation("MedicalShopItems");
                 });
 #pragma warning restore 612, 618
         }

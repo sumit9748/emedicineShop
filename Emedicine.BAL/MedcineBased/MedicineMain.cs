@@ -1,5 +1,7 @@
 ﻿
+using Emedicine.DAL.Data;
 using Emedicine.DAL.DataAccess.Interface;
+using Emedicine.DAL.DataManupulation;
 using Emedicine.DAL.model;
 
 
@@ -29,7 +31,11 @@ namespace Emedicine.BAL.MedcineBased
         {
             return await _da.medicine.GetFirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<bool> AddMedicine(Medicine medicine)
+        public async Task<Medicalshop> GetMedicalshopById(int id)
+        {
+            return await _da.medicalShop.GetFirstOrDefaultAsync(x => x.ID == id);
+        }
+        public async Task<bool> AddMedicine(MedicineVm medicine)
         {
             if (medicine == null)
             {
@@ -37,13 +43,40 @@ namespace Emedicine.BAL.MedcineBased
             }
             else
             {
-                IEnumerable<Medicine> medicines = await _da.medicine.GetAllAsync();
-                if (medicines.Any(med => med.Id == medicine.Id || med.Name == medicine.Name))
+                var medicines = await _da.medicine.GetAllAsync();
+                if(medicines.Any(m=>m.Name == medicine.Name))
                 {
                     return await Task.FromResult(false);
                 }
-                _da.medicine.AddAsync(medicine);
+                var med = new Medicine
+                {
+                    Name = medicine.Name,
+                    Manufacturer = medicine.Manufacturer,
+                    UnitPrice = medicine.UnitPrice,
+                    Discount = medicine.Discount,
+                    ExpDate = medicine.ExpDate,
+                    ImgUrl = medicine.ImgUrl,
+                    Status = medicine.Status,
+                    Type = medicine.Type,
+
+                };
+                 _da.medicine.AddAsync(med);
                 _da.save();
+                
+                foreach(var id in medicine.MedicalShops)
+                {
+                    var medicalshop=await _da.medicalShop.GetFirstOrDefaultAsync(c=>c.ID== id);
+                    var mItem = new MedicalShopItem
+                    {
+                        MedicalShopId = id,
+                        MedicineId = med.Id,
+                        Medicine=med,
+                        MedicalShop= medicalshop,
+                        Quantity=10,
+                    };
+                    _da.medicalShopItem.AddAsync(mItem);
+                    _da.save();
+                }
                 return await Task.FromResult(true);
             }
 
@@ -62,6 +95,6 @@ namespace Emedicine.BAL.MedcineBased
         {
             return await _da.medicine.GetMedicalShopItems(id);
         }
-       
+
     }
 }

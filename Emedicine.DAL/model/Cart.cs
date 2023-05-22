@@ -7,7 +7,7 @@ namespace Emedicine.DAL.model
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+        
         public int UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual User user { get; set; }
@@ -17,11 +17,11 @@ namespace Emedicine.DAL.model
         public decimal Discount { get; set; }
         [Required]
         public int Quantity { get; set; }
-        [Required]
         public int MedicineId { get; set; }
         [ForeignKey("MedicineId")]
-        public virtual Medicine medicine { get; set; }
+        public virtual Medicine Medicine { get; set; }
         public int MedicalShopId { get; set; }
-        public virtual Medicalshop medicicalshop { get; set; }
+        [ForeignKey("MedicalShopId")]
+        public virtual Medicalshop Medicicalshop { get; set; }
     }
 }

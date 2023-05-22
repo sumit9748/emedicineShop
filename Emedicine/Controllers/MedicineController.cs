@@ -1,7 +1,9 @@
 ﻿
 
 using Emedicine.BAL.MedcineBased;
+using Emedicine.DAL.DataManupulation;
 using Emedicine.DAL.model;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
@@ -33,13 +35,13 @@ namespace Emedicine.Controllers
             }
         }
         
-        [HttpPost]
-        public async Task<IActionResult> AddMedicine(Medicine medicine)
+        [HttpPost("Medicine")]
+        public async Task<IActionResult> AddMedicine(MedicineVm medicine)
         {
             try
             {
                 if (medicine == null)
-                    return BadRequest();
+                    return BadRequest("Object cannot be null");
                 if (await md.AddMedicine(medicine))
                 {
                     return StatusCode(
@@ -56,6 +58,7 @@ namespace Emedicine.Controllers
 
         }
         
+
         [HttpGet("{id}")]
         public Task<Medicine> GetMedicne(int id)
         {

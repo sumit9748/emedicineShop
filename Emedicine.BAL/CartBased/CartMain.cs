@@ -24,12 +24,25 @@ namespace Emedicine.BAL.CartBased
             }
             else
             {
-                IEnumerable<Cart> carts = await _da.cart.GetAllListAsync(c=>c.UserId==cart.UserId);
+                /*IEnumerable<Cart> carts = await _da.cart.GetAllListAsync(c=>c.UserId==cart.UserId);
                 if (carts.Any(c =>c.MedicineId == cart.MedicineId))
                 {
                     return await Task.FromResult(false);
-                }
-                _da.cart.AddAsync(cart);
+                }*/
+                Cart newCart = new Cart
+                {
+                    Id = cart.Id,
+                    UserId = cart.UserId,
+                    //user=cart.user,
+                    Price=cart.Price,
+                    Discount=cart.Discount,
+                    Quantity=cart.Quantity,
+                    MedicineId=cart.MedicineId,
+                    //medicine=cart.medicine,
+                    MedicalShopId=cart.MedicalShopId,
+                    //medicicalshop=cart.medicicalshop,
+                };
+                _da.cart.AddAsync(newCart);
                 _da.save();
                 return await Task.FromResult(true);
             }
@@ -44,7 +57,7 @@ namespace Emedicine.BAL.CartBased
 
         public async Task<IEnumerable<Cart>> GGetCartByUserId(int userId)
         {
-            return await _da.cart.GetAllCartByUserId(userId);
+            return await _da.cart.GetAllListAsync(c=>c.UserId==userId);
         }
 
         public void UpdateCart(Cart cart)

@@ -34,5 +34,7 @@ namespace Emedicine.DAL.model
         public string Type { set; get; }
 
         public string Status { get; set; }
+
+        
     }
 }

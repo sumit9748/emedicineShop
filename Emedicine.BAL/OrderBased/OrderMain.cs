@@ -39,7 +39,7 @@ namespace Emedicine.BAL.OrderBased
                 ori.OrderId = order.Id;
                 ori.order=order;
                 ori.MedicineId = item.MedicineId;
-                ori.medicine = item.medicine;
+                ori.medicine = item.Medicine;
                 _da.orderItem.AddAsync(ori);
             }
             return await Task.FromResult(true);

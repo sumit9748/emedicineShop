@@ -4,6 +4,7 @@ using Emedicine.BAL.CartBased;
 using Emedicine.DAL.model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
 namespace Emedicine.Controllers
 {
@@ -42,14 +43,22 @@ namespace Emedicine.Controllers
             {
                 return StatusCode(
                        StatusCodes.Status502BadGateway,
-                       "Something went wrong");
+                       "Something went seriously wrong");
             }
         }
 
         [HttpGet("{userId}")]
         public Task<IEnumerable<Cart>> GetCarts(int userId)
         {
-            return  ic.GGetCartByUserId(userId);
+            try
+            {
+                return ic.GGetCartByUserId(userId);
+
+            }
+            catch(Exception ex){
+                IEnumerable<Cart> carts = new List<Cart>();
+                return (Task<IEnumerable<Cart>>)carts;
+            }
         }
 
         [HttpPut("{id}")]

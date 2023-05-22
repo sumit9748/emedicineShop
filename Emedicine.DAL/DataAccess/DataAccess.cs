@@ -19,7 +19,8 @@ namespace Emedicine.DAL.DataAccess
             user=new UserRepo(md);
             medicine = new MedicineRepo(md);
             medicalShop = new MedicalShopRepo(md);
-            order=new OrderRepo(md);
+            medicalShopItem=new MedicalShopItemRepo(md);
+            order =new OrderRepo(md);
             orderItem = new OrderItemRepo(md);
             cart=new CartRepo(md);
         }
@@ -32,7 +33,7 @@ namespace Emedicine.DAL.DataAccess
         public ICart cart { get; private set;}
         public void save()
         {
-            md.SaveChangesAsync();
+             md.SaveChangesAsync();
         }
 
     }
@@ -64,7 +65,7 @@ namespace Emedicine.DAL.DataAccess
         {
             var ans = from ms in MedicalShopItemDbSet
                       where ms.MedicalShopId == id
-                      select ms.medicine;
+                      select ms.Medicine;
 
             return await ans.ToListAsync();
         }
@@ -109,19 +110,13 @@ namespace Emedicine.DAL.DataAccess
     }
     public class CartRepo : Repo<Cart>, ICart
     {
-        public readonly MedicineDbContext md;
-        public DbSet<Cart> CartDbSet { get; set; }
+        private readonly MedicineDbContext md;
+        
         public CartRepo(MedicineDbContext _md) : base(_md)
         {
             md = _md;
-            CartDbSet=md.Set<Cart>();
+            
         }
-        public async Task<IEnumerable<Cart>> GetAllCartByUserId(int userId)
-        {
-            var ans=from cart in CartDbSet
-                    where cart.UserId == userId
-                    select cart;
-            return await ans.ToListAsync();
-        }
+
     }
 }

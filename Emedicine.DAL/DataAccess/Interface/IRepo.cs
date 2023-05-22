@@ -10,13 +10,14 @@ namespace Emedicine.DAL.DataAccess.Interface
 {
     public interface IRepo<T> where T : class
     {
-        void AddAsync(T entity);
-        void Remove(T entity);
-        void RemoveRange(IEnumerable<T> entities);
+        public void AddAsync(T entity);
+        public void Remove(T entity);
+        public void RemoveRange(IEnumerable<T> entities);
         void UpdateExisting(T entity);
 
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter);
         Task<IEnumerable<T>> GetAllListAsync(Expression<Func<T, bool>> filter);
+
     }
 }
