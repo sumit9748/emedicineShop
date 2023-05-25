@@ -20,6 +20,7 @@ namespace Emedicine.DAL.Data
                  .HasForeignKey(bi => bi.MedicalShopId);
 
             base.OnModelCreating(modelBuilder);
+            
         }
         public MedicineDbContext(DbContextOptions options) : base(options) { }
         public DbSet<User> Users { get; set; }

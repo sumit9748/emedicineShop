@@ -1,5 +1,6 @@
 ﻿using Emedicine.BAL.CartBased;
 using Emedicine.DAL.DataAccess.Interface;
+using Emedicine.DAL.DataManupulation;
 using Emedicine.DAL.model;
 
 namespace Emedicine.BAL.OrderBased
@@ -11,7 +12,7 @@ namespace Emedicine.BAL.OrderBased
         {
             _da = da;
         }
-        public async Task<bool> AddOrder(Order order)
+        public async Task<bool> AddOrder(OrderVm order)
         {
             if (order == null)
             {
@@ -19,36 +20,46 @@ namespace Emedicine.BAL.OrderBased
             }
             else
             {
-                
-                _da.order.AddAsync(order);
-                
+                double orderTotal = 0, discount = 0;
+                foreach(var item in order.carts)
+                {
+                    orderTotal += item.Price;
+                    discount += item.Discount;
+                }
+                orderTotal = (orderTotal * (100 - discount)) / 100;
+
+                Order newOrder = new Order
+                {
+                    UserId = order.UserId,
+                    OrderTotal = (decimal)orderTotal,
+                    OrderStatus = "pending",
+                };
+                _da.order.AddAsync(newOrder);
                 _da.save();
+                foreach (var item in order.carts)
+                {
+                    var orderItem = new OrderItem()
+                    {
+
+                        MedicineId = item.MedicineId,
+                        OrderId = newOrder.Id,
+                    };
+                    _da.orderItem.AddAsync(orderItem);
+                    _da.save();
+                };
+                
+                
+                
                 return await Task.FromResult(true);
             }
         }
 
-        public async Task<bool> AddOrderItem(Order order,IList<Cart> cartItem)
-        {
-            if(order==null || cartItem.Count==0)
-            {
-                return  await Task.FromResult(false);
-            }
-            foreach(var item in cartItem)
-            {
-                OrderItem ori = new OrderItem();
-                ori.OrderId = order.Id;
-                ori.order=order;
-                ori.MedicineId = item.MedicineId;
-                ori.medicine = item.Medicine;
-                _da.orderItem.AddAsync(ori);
-            }
-            return await Task.FromResult(true);
-
-        }
+        
 
         public async Task<Order> GetOrderById(int orderId)
         {
             return await _da.order.GetFirstOrDefaultAsync(c=>c.Id==orderId);
+            
         }
 
         public async Task<bool> RemoveOrder(Order order)
@@ -76,6 +87,10 @@ namespace Emedicine.BAL.OrderBased
         public async Task<IEnumerable<OrderItem>> DeleteOrderItems(int orderId)
         {
             return await _da.orderItem.GetAllListAsync(c=>c.OrderId==orderId);
+        }
+        public async Task<Order> kireOrderDibi(int id)
+        {
+            return await _da.order.GetorderById(id);
         }
         
     }

@@ -1,6 +1,7 @@
 ﻿
 
 using Emedicine.BAL.CartBased;
+using Emedicine.DAL.DataManupulation;
 using Emedicine.DAL.model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace Emedicine.Controllers
             ic = _ic;
         }
         [HttpPost]
-        public async Task<IActionResult> AddCart(Cart cart)
+        public async Task<IActionResult> AddCart(CartVm cart)
         {
             try
             {
@@ -78,8 +79,7 @@ namespace Emedicine.Controllers
             }
             catch (Exception es)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                                  "Error updating cart");
+                return BadRequest("Cart cannot be added");
             }
         }
         [HttpDelete("{id}")]
@@ -94,10 +94,16 @@ namespace Emedicine.Controllers
             }
             catch (Exception es)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                                  "Error deleting cartitem");
+                return BadRequest("Error deleting cart item");
             }
 
+        }
+        [HttpGet("cartofUser/{userId}")]
+        public async Task<IEnumerable<Medicine>> GetMedOfuserFromcart(int userId)
+        {
+
+              return (IEnumerable<Medicine>)await ic.getMedicinefromCart(userId);
+            
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Emedicine.DAL.model
 {
@@ -10,18 +11,23 @@ namespace Emedicine.DAL.model
         
         public int UserId { get; set; }
         [ForeignKey("UserId")]
+        [JsonIgnore]
         public virtual User user { get; set; }
         [Required]
-        public decimal Price { get; set; }
+        public double Price { get; set; }
         [Required]
-        public decimal Discount { get; set; }
+        public double Discount { get; set; }
         [Required]
         public int Quantity { get; set; }
+
         public int MedicineId { get; set; }
         [ForeignKey("MedicineId")]
+        [JsonIgnore]
+
         public virtual Medicine Medicine { get; set; }
         public int MedicalShopId { get; set; }
         [ForeignKey("MedicalShopId")]
+        [JsonIgnore]
         public virtual Medicalshop Medicicalshop { get; set; }
     }
 }

@@ -91,6 +91,11 @@ namespace Emedicine.DAL.DataAccess
         {
             md = _md;
         }
+        public async Task<Order> GetorderById(int id)
+        {
+            return await md.Orders.Include(o=>o.user).FirstOrDefaultAsync(c=>c.Id==id);
+        }
+
     }
     public class OrderItemRepo : Repo<OrderItem>, IOrderItem
     {
@@ -111,12 +116,30 @@ namespace Emedicine.DAL.DataAccess
     public class CartRepo : Repo<Cart>, ICart
     {
         private readonly MedicineDbContext md;
-        
+        public DbSet<Cart> cartDbSet { get; set; }
+
+
         public CartRepo(MedicineDbContext _md) : base(_md)
         {
             md = _md;
-            
-        }
+            cartDbSet = md.Set<Cart>();
 
+
+        }
+        public async Task<IEnumerable<Medicine>> GetMedicinesByUserfromcart(int userId)
+        {
+            var medicines = from c in cartDbSet
+                            where c.UserId == userId
+                            select c.Medicine;
+            return await medicines.ToListAsync();
+        }
+        public Cart GetCartById(int id)
+        {
+            var cart =  cartDbSet.Include(c=>c.Medicine).
+                Include(c=>c.Medicine).
+                Include(c=>c.Medicicalshop).
+                FirstOrDefault(c => c.Id == id);
+            return cart; 
+        }
     }
 }

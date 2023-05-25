@@ -65,13 +65,13 @@ namespace Emedicine.BAL.MedcineBased
                 
                 foreach(var id in medicine.MedicalShops)
                 {
-                    var medicalshop=await _da.medicalShop.GetFirstOrDefaultAsync(c=>c.ID== id);
+                    //var medicalshop=await _da.medicalShop.GetFirstOrDefaultAsync(c=>c.ID== id);
                     var mItem = new MedicalShopItem
                     {
                         MedicalShopId = id,
                         MedicineId = med.Id,
-                        Medicine=med,
-                        MedicalShop= medicalshop,
+                        //Medicine=med,
+                        //MedicalShop= medicalshop,
                         Quantity=10,
                     };
                     _da.medicalShopItem.AddAsync(mItem);

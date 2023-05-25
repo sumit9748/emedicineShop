@@ -44,14 +44,16 @@ namespace Emedicine.Controllers
             }
         }
         [HttpGet("{id}")]
-        public Task<User> GetUser(int id) {
+        public async Task<IActionResult> GetUser(int id) {
             try
             {
-                return md.GetUser(id);
+                var user=await md.GetUser(id);
+                if(user==null) return BadRequest("user id not exists");
+                return Ok(user);
             }
             catch (Exception es)
             {
-                return null;
+                return BadRequest("something went erong");
             }
         }
         [HttpPost]

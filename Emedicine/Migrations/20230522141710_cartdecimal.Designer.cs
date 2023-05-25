@@ -4,6 +4,7 @@ using Emedicine.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Emedicine.Migrations
 {
     [DbContext(typeof(MedicineDbContext))]
-    partial class MedicineDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230522141710_cartdecimal")]
+    partial class cartdecimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +59,7 @@ namespace Emedicine.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.MedicalShopItem", b =>
@@ -84,7 +87,7 @@ namespace Emedicine.Migrations
 
                     b.HasIndex("MedicineId");
 
-                    b.ToTable("MedicalShopItems", (string)null);
+                    b.ToTable("MedicalShopItems");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.Medicalshop", b =>
@@ -108,7 +111,7 @@ namespace Emedicine.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Medicalshops", (string)null);
+                    b.ToTable("Medicalshops");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.Medicine", b =>
@@ -151,7 +154,7 @@ namespace Emedicine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Medicines", (string)null);
+                    b.ToTable("Medicines");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.Order", b =>
@@ -161,6 +164,10 @@ namespace Emedicine.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("MedicalShopId")
+                        .IsRequired()
+                        .HasColumnType("int");
 
                     b.Property<string>("OrderStatus")
                         .IsRequired()
@@ -175,9 +182,11 @@ namespace Emedicine.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MedicalShopId");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.OrderItem", b =>
@@ -202,7 +211,7 @@ namespace Emedicine.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrdersItems", (string)null);
+                    b.ToTable("OrdersItems");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.User", b =>
@@ -249,7 +258,7 @@ namespace Emedicine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.Cart", b =>
@@ -300,11 +309,19 @@ namespace Emedicine.Migrations
 
             modelBuilder.Entity("Emedicine.DAL.model.Order", b =>
                 {
+                    b.HasOne("Emedicine.DAL.model.Medicalshop", "medicalshop")
+                        .WithMany()
+                        .HasForeignKey("MedicalShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Emedicine.DAL.model.User", "user")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("medicalshop");
 
                     b.Navigation("user");
                 });

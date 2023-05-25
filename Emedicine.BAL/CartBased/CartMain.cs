@@ -1,10 +1,7 @@
 ﻿using Emedicine.DAL.DataAccess.Interface;
+using Emedicine.DAL.DataManupulation;
 using Emedicine.DAL.model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Emedicine.BAL.CartBased
 {
@@ -16,7 +13,7 @@ namespace Emedicine.BAL.CartBased
             _da = da;
 
         }
-        public async Task<bool> AddCart(Cart cart)
+        public async Task<bool> AddCart(CartVm cart)
         {
             if (cart == null)
             {
@@ -24,26 +21,27 @@ namespace Emedicine.BAL.CartBased
             }
             else
             {
-                /*IEnumerable<Cart> carts = await _da.cart.GetAllListAsync(c=>c.UserId==cart.UserId);
-                if (carts.Any(c =>c.MedicineId == cart.MedicineId))
+                IEnumerable<Cart> carts = await _da.cart.GetAllListAsync(c=>c.UserId==cart.UserId);
+                
+                foreach (var item in cart.Medicines)
                 {
-                    return await Task.FromResult(false);
-                }*/
-                Cart newCart = new Cart
-                {
-                    Id = cart.Id,
-                    UserId = cart.UserId,
-                    //user=cart.user,
-                    Price=cart.Price,
-                    Discount=cart.Discount,
-                    Quantity=cart.Quantity,
-                    MedicineId=cart.MedicineId,
-                    //medicine=cart.medicine,
-                    MedicalShopId=cart.MedicalShopId,
-                    //medicicalshop=cart.medicicalshop,
-                };
-                _da.cart.AddAsync(newCart);
-                _da.save();
+                    var medicine = await _da.medicine.GetFirstOrDefaultAsync(c => c.Id == item);
+                    if (carts.Any(c => c.MedicineId == item)) continue;
+                    
+                    Cart newCart = new Cart
+                    {
+
+                        UserId = cart.UserId,
+                        Price=medicine.UnitPrice* cart.Quantity,
+                        Discount=medicine.Discount,
+                        Quantity=cart.Quantity,
+                        MedicineId=item,
+                        MedicalShopId=cart.MedicalShopId,
+
+                    };
+                    _da.cart.AddAsync(newCart);
+                    _da.save();
+                }
                 return await Task.FromResult(true);
             }
         }
@@ -69,5 +67,11 @@ namespace Emedicine.BAL.CartBased
         {
             return await _da.cart.GetFirstOrDefaultAsync(c=>c.Id==id);
         }
+        public async Task<IEnumerable<Medicine>> getMedicinefromCart(int userId)
+        {
+            return await _da.cart.GetMedicinesByUserfromcart(userId);
+        }
+
+        
     }
 }

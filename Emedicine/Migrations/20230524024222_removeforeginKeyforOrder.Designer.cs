@@ -4,6 +4,7 @@ using Emedicine.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Emedicine.Migrations
 {
     [DbContext(typeof(MedicineDbContext))]
-    partial class MedicineDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230524024222_removeforeginKeyforOrder")]
+    partial class removeforeginKeyforOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +59,7 @@ namespace Emedicine.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.MedicalShopItem", b =>
@@ -84,7 +87,7 @@ namespace Emedicine.Migrations
 
                     b.HasIndex("MedicineId");
 
-                    b.ToTable("MedicalShopItems", (string)null);
+                    b.ToTable("MedicalShopItems");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.Medicalshop", b =>
@@ -108,7 +111,7 @@ namespace Emedicine.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Medicalshops", (string)null);
+                    b.ToTable("Medicalshops");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.Medicine", b =>
@@ -151,7 +154,7 @@ namespace Emedicine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Medicines", (string)null);
+                    b.ToTable("Medicines");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.Order", b =>
@@ -177,7 +180,7 @@ namespace Emedicine.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.OrderItem", b =>
@@ -202,7 +205,7 @@ namespace Emedicine.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrdersItems", (string)null);
+                    b.ToTable("OrdersItems");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.User", b =>
@@ -249,7 +252,7 @@ namespace Emedicine.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Emedicine.DAL.model.Cart", b =>

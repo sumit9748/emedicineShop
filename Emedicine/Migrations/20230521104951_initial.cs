@@ -99,8 +99,8 @@ namespace Emedicine.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "double(18,2)", nullable: false),
+                    Discount = table.Column<decimal>(type: "double(18,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     MedicineId = table.Column<int>(type: "int", nullable: false),
                     MedicalShopId = table.Column<int>(type: "int", nullable: false)

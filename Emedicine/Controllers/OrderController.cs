@@ -1,5 +1,6 @@
 ﻿using Emedicine.BAL.CartBased;
 using Emedicine.BAL.OrderBased;
+using Emedicine.DAL.DataManupulation;
 using Emedicine.DAL.model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.Identity.Client;
 using System.Web.Mvc;
 using ControllerBase = Microsoft.AspNetCore.Mvc.ControllerBase;
 using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
@@ -22,30 +24,22 @@ namespace Emedicine.Controllers
             ic = _ic;
         }
         [HttpPost("AddOrder")]
-        public async Task<IActionResult> AddOrder([FromBody] IList<Cart> carts)
+        public async Task<IActionResult> AddOrder(OrderVm order)
         {
             try
             {
-               /* if(await ic.AddOrderItem(order,carts))
+               if(await ic.AddOrder(order))
                 {
-                    if(await ic.AddOrder(order))
-                    {
-                        return StatusCode(
-                       StatusCodes.Status200OK,
-                       "order added successfully");
-                    }
-                    else
-                    {
-                        return StatusCode(
-                       StatusCodes.Status403Forbidden,
-                       "Order items are not found");
-                    }
+
+                   return StatusCode(
+                   StatusCodes.Status200OK,
+                   "order added successfully");
                     
                 }
                 else
-               */return  StatusCode(
+               return  StatusCode(
                        StatusCodes.Status403Forbidden,
-                       " Format is wrong");
+                       " Something went wrong");
             }
             catch(Exception ex)
             {
@@ -87,6 +81,12 @@ namespace Emedicine.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("wholeorder/{orderId}")]
+        public async Task<Order> GetOrderById(int orderId)
+        {
+            return await ic.kireOrderDibi(orderId);
         }
     }
 }

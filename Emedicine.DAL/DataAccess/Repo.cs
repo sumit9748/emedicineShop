@@ -18,9 +18,10 @@ namespace Emedicine.DAL.DataAccess
             DbSet=_md.Set<T>();
         }
 
-        public void AddAsync(T entity)
+        public async void AddAsync(T entity)
         {
-          DbSet.AddAsync(entity);
+          await DbSet.AddAsync(entity);
+            md.SaveChanges();
     
         }
 
@@ -45,8 +46,9 @@ namespace Emedicine.DAL.DataAccess
 
         public void Remove(T entity)
         {
-            DbSet.Remove(entity);
-             
+             DbSet.Remove(entity);
+            md.SaveChanges();
+
         }
 
         public void RemoveRange(IEnumerable<T> entities)

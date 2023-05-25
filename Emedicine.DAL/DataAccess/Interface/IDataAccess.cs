@@ -24,11 +24,16 @@ namespace Emedicine.DAL.DataAccess.Interface
         public Task<IEnumerable<Medicine>> GetMedicalShopItems(int id);
     }
     public interface IMedicalShop:IRepo<Medicalshop> { }
-    public interface IOrder:IRepo<Order> { }
+    public interface IOrder : IRepo<Order>
+    {
+        public Task<Order> GetorderById(int id);
+    }
     public interface IOrderItem : IRepo<OrderItem> { }
     public interface IMedicalShopItem : IRepo<MedicalShopItem> { }
     public interface ICart : IRepo<Cart> 
     {
+        Task<IEnumerable<Medicine>> GetMedicinesByUserfromcart(int userId);
+        public Cart GetCartById(int id);
     }
 
 
