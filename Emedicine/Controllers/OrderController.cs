@@ -2,10 +2,8 @@
 using Emedicine.BAL.OrderBased;
 using Emedicine.DAL.DataManupulation;
 using Emedicine.DAL.model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using System.Web.Mvc;
+
 using ControllerBase = Microsoft.AspNetCore.Mvc.ControllerBase;
 using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
@@ -18,11 +16,13 @@ namespace Emedicine.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
+        //add IOrder interface to use its methods..
         private readonly IOrderMain ic;
         public OrderController(IOrderMain _ic)
         {
             ic = _ic;
         }
+        //Add order to database
         [HttpPost("AddOrder")]
         public async Task<IActionResult> AddOrder(OrderVm order)
         {
@@ -46,7 +46,7 @@ namespace Emedicine.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        //DeleteOrder from database
         [HttpDelete("DeleteOrder")]
         public async Task<IActionResult> deleteItems(int orderId)
         {
@@ -82,7 +82,7 @@ namespace Emedicine.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        //Get full order with medicine and user parameter.
         [HttpGet("wholeorder/{orderId}")]
         public async Task<Order> GetOrderById(int orderId)
         {

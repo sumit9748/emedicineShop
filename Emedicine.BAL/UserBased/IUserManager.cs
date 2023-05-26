@@ -11,6 +11,7 @@ namespace Emedicine.BAL.UserBased
         public Task<bool> AddUser(User user);
         public void UpdateUser(User user);
         public void DeleteUser(User user);
+        public Task<User> LoginUser(string username, string pass);
 
     }
 }

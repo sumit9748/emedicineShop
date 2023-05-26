@@ -12,6 +12,7 @@ namespace Emedicine.BAL.OrderBased
         {
             _da = da;
         }
+        //Add a order into database.
         public async Task<bool> AddOrder(OrderVm order)
         {
             if (order == null)
@@ -20,12 +21,17 @@ namespace Emedicine.BAL.OrderBased
             }
             else
             {
+                //Its a tricky one..
+                //Here i try to add the order from cart
+                //First i calculate the orderTotal parameter 
+                //Then i create a Order object and add it to database
                 double orderTotal = 0, discount = 0;
                 foreach(var item in order.carts)
                 {
                     orderTotal += item.Price;
                     discount += item.Discount;
                 }
+                //After adding and discount
                 orderTotal = (orderTotal * (100 - discount)) / 100;
 
                 Order newOrder = new Order
@@ -36,6 +42,8 @@ namespace Emedicine.BAL.OrderBased
                 };
                 _da.order.AddAsync(newOrder);
                 _da.save();
+                //This one for adding the orderItems
+                //Means which items are ordered for a particular orderId
                 foreach (var item in order.carts)
                 {
                     var orderItem = new OrderItem()
@@ -48,20 +56,18 @@ namespace Emedicine.BAL.OrderBased
                     _da.save();
                 };
                 
-                
-                
                 return await Task.FromResult(true);
             }
         }
 
         
-
+        //Get orderBy id
         public async Task<Order> GetOrderById(int orderId)
         {
             return await _da.order.GetFirstOrDefaultAsync(c=>c.Id==orderId);
             
         }
-
+        //Remove Order from database by orderId
         public async Task<bool> RemoveOrder(Order order)
         {
             if(order==null)
@@ -73,7 +79,8 @@ namespace Emedicine.BAL.OrderBased
             return await Task.FromResult(true);
 
         }
-
+        //Remove orderItem from database
+        //After removing the order it is mandetory to remove orderItems also from the table.
         public async Task<bool> RemoveOrderItem(int orderId)
         {
             IEnumerable<OrderItem> orderItems= await _da.orderItem.GetAllListAsync(o=>o.OrderId == orderId);
@@ -84,6 +91,7 @@ namespace Emedicine.BAL.OrderBased
             }
             return await Task.FromResult(true);
         }
+        //DelteorderItems
         public async Task<IEnumerable<OrderItem>> DeleteOrderItems(int orderId)
         {
             return await _da.orderItem.GetAllListAsync(c=>c.OrderId==orderId);

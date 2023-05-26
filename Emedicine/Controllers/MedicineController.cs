@@ -14,13 +14,14 @@ namespace Emedicine.Controllers
     [ApiController]
     public class MedicineController : ControllerBase
     {
+        //couple IMedicinemain interface to call its method
         private readonly IMedicineMain md;
         public MedicineController(IMedicineMain _md)
         {
             md = _md;
         }
 
-
+        //get medicalshopItems like medicines.
         [HttpGet("medicalShopItems/{medicalshopid}")]
         public Task<IEnumerable<Medicine>> GetMedicalShopMedicines(int medicalshopid)
         {
@@ -34,7 +35,7 @@ namespace Emedicine.Controllers
                 return (Task<IEnumerable<Medicine>>)medicines;
             }
         }
-        
+        //Add a medicine to database
         [HttpPost("Medicine")]
         public async Task<IActionResult> AddMedicine(MedicineVm medicine)
         {
@@ -58,18 +59,19 @@ namespace Emedicine.Controllers
 
         }
         
-
+        //Get medicine by id
         [HttpGet("{id}")]
         public Task<Medicine> GetMedicne(int id)
         {
              return md.GetMedicineById(id);
         }
-        
+        //Update a medicine by its id
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMedicine(int id, [FromBody] Medicine medicine)
         {
             try
             {
+                //helps to get the medicine with id parameter
                 Medicine med = await md.GetMedicineById(id);
                 if (med == null) return NotFound();
                 med.Manufacturer = medicine.Manufacturer;
@@ -82,6 +84,7 @@ namespace Emedicine.Controllers
                 med.UnitPrice= medicine.UnitPrice;
 
                 md.UpdateMedicine(med);
+                //Ok is under IActionResult
                 return Ok("Medicine updated successfully");
             }
             catch (Exception es)
@@ -90,7 +93,7 @@ namespace Emedicine.Controllers
                                   "Error updating medicine");
             }
         }
-
+        //Delete medicine from database.
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMedicine(int id)
         {

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Emedicine.DAL.DataAccess
 {
+    //It implements the IDataaccess interface
     public class DataAccess : IDataAccess
     {
         public readonly MedicineDbContext md;
@@ -24,6 +25,9 @@ namespace Emedicine.DAL.DataAccess
             orderItem = new OrderItemRepo(md);
             cart=new CartRepo(md);
         }
+        //From here we use all the models.
+        //so here it is use beacause:- not only with those 6 methods we also need some extra features for each class seperately
+        //Which are mentioned in each repo
         public IUser user { get;private set; }
         public IMedicine medicine { get; private set; }
         public IMedicalShop medicalShop { get; private set; }
@@ -37,6 +41,8 @@ namespace Emedicine.DAL.DataAccess
         }
 
     }
+    //UserRepo class implements Repo<User> and Iuser Interface
+    //So it can access the methods of repo and also the IUser interface methods.
     public class UserRepo : Repo<User>, IUser
     {
         public readonly MedicineDbContext md;

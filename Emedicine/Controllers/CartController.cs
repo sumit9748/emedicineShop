@@ -3,9 +3,7 @@
 using Emedicine.BAL.CartBased;
 using Emedicine.DAL.DataManupulation;
 using Emedicine.DAL.model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
 
 namespace Emedicine.Controllers
 {
@@ -18,6 +16,7 @@ namespace Emedicine.Controllers
         {
             ic = _ic;
         }
+        //Add cart controller
         [HttpPost]
         public async Task<IActionResult> AddCart(CartVm cart)
         {
@@ -47,7 +46,7 @@ namespace Emedicine.Controllers
                        "Something went seriously wrong");
             }
         }
-
+        //Get cart by userId
         [HttpGet("{userId}")]
         public Task<IEnumerable<Cart>> GetCarts(int userId)
         {
@@ -61,7 +60,7 @@ namespace Emedicine.Controllers
                 return (Task<IEnumerable<Cart>>)carts;
             }
         }
-
+        //update a particular cart
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCart(int id, [FromBody] Cart cart)
         {
@@ -82,6 +81,7 @@ namespace Emedicine.Controllers
                 return BadRequest("Cart cannot be added");
             }
         }
+        //Delete a cart
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCart(int id)
         {
@@ -98,7 +98,8 @@ namespace Emedicine.Controllers
             }
 
         }
-        [HttpGet("cartofUser/{userId}")]
+        //get medicines of a userId present in a cart
+        [HttpGet("MedicinesofUser/{userId}")]
         public async Task<IEnumerable<Medicine>> GetMedOfuserFromcart(int userId)
         {
 

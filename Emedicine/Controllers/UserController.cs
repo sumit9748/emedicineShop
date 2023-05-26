@@ -16,6 +16,7 @@ namespace Emedicine.Controllers
         }
         [HttpGet]
         [Route("AllUser")]
+        //To get all user..
         public Task<IEnumerable<User>> GetAllUser()
         {
             try
@@ -31,6 +32,7 @@ namespace Emedicine.Controllers
         }
         [HttpGet]
         [Route("OnlineUser")]
+        //To get those user which are online
         public Task<IEnumerable<User>> GetOnlineUser()
         {
             try
@@ -44,6 +46,7 @@ namespace Emedicine.Controllers
             }
         }
         [HttpGet("{id}")]
+        //Get a particular user with his id
         public async Task<IActionResult> GetUser(int id) {
             try
             {
@@ -56,7 +59,8 @@ namespace Emedicine.Controllers
                 return BadRequest("something went erong");
             }
         }
-        [HttpPost]
+        [HttpPost("Register")]
+        //Register a new user..
         public async Task<IActionResult> AddUser(User user)
         {
             try
@@ -80,6 +84,7 @@ namespace Emedicine.Controllers
         }
         
         [HttpPut("{id}")]
+        //Update a partcular user with his id
         public async Task<IActionResult> UpdateUser(int id,[FromBody] User user)
         {
             try
@@ -102,6 +107,7 @@ namespace Emedicine.Controllers
             }
         }
         [HttpDelete("{id}")]
+        //Delete a particular user with his id
         public async Task<IActionResult> DeleteUser(int id)
         {
             try
@@ -118,6 +124,20 @@ namespace Emedicine.Controllers
             }
 
         }
+        //logged in a user
+        [HttpPost("Login")]
+        public async Task<User> LoginUser(UserLogin userLogin)
+        {
+            if (userLogin == null)
+            {
+                return null;
+            }
+            else
+            {
+                return await md.LoginUser(userLogin.Email, userLogin.Password);
+            }
+        }
+        
 
     }
 }
